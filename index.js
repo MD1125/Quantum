@@ -349,5 +349,5 @@ server.listen(3000, () => { });
 
 
 // Final Login lol
-client.login(config.testbotToken);
+client.login(config.token);
 
