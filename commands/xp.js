@@ -4,10 +4,9 @@ const firebase = require('firebase');
 const config = require('../config.json');
 
 async function view(interaction, user, guildID) {
-    interaction.reply({ content: "Updating Ranks...", ephemeral: false });
+    interaction.deferReply();
     try {
         let embedString;
-        //interaction.reply("working...")
         while (true) {
             let currentXP = "";
             let currentRankName = "";

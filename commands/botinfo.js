@@ -63,8 +63,7 @@ module.exports = {
                 { name: 'Operating System:', value: getOperatingSystem() },
                 { name: 'Server Uptime:', value: getServerUptime() },
                 { name: 'Free Memory:', value: getFreeMemory() },
-                { name: 'Total Memory:', value: getTotalMemory() },
-                { name: 'Api Key:', value: '7jD-f2nG9R-5aP3-sL8eVX' }
+                { name: 'Total Memory:', value: getTotalMemory() }
             );
 
 

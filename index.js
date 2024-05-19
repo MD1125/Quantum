@@ -5,7 +5,7 @@ var osu = require('node-os-utils')
 const { readdirSync } = require('fs');
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 const snekfetch = require('snekfetch');
-const fetch = require(`node-fetch`);
+const fetch = import(`node-fetch`);
 const axios = require('axios'); // Import axios library
 const fs = require('fs');
 
@@ -82,6 +82,11 @@ client.once('ready', () => {
     slashCommands?.create({
         name: 'modules',
         description: 'Shows you a list of all available Modules',
+    });
+
+    slashCommands?.create({
+        name: 'quota',
+        description: 'View your Quota Completion.',
     });
 
     slashCommands?.create({
@@ -215,7 +220,6 @@ client.on('interactionCreate', async (interaction) => {
     const { body } = await snekfetch.get(`${config.firebaseURL}Interactions.json`);
     const latest_acknowledged = body.latest || 0; 
     const updated_latest = latest_acknowledged + 1; 
-    firebase.database().ref(`Interactions/`).set({ "latest": updated_latest }); 
     
     const Interaction_ID = updated_latest; 
     const embed = new MessageEmbed()
@@ -231,39 +235,30 @@ client.on('interactionCreate', async (interaction) => {
         const guildId = interaction.guild.id
 
 const newData = {
-    [updated_latest]: {
         "interactionID": Interaction_ID,
         "channel": interaction.channel.name,
         "channelid": interaction.channel.id,
         "command": interaction.commandName,
-        "commandid": interaction.commandID, // Use commandID instead of commandid
+        "commandid": "test", // Use commandID instead of commandid
         "guild": interaction.guild.name, 
         "guildID": interaction.guild.id, 
-        "username": interaction.user.tag,
         "userid": interaction.user.id,
+        "username": interaction.user.tag,
         "Version": "v2",
         //"options": interaction // Include only the options the user used in the command
-    }
 };
         
-        // File path
-        const filePath = `./Logs/Interactionlogs/Guilds/${guildId}.json`;
-        
-        if (fs.existsSync(filePath)) {
-            // Read existing data from the file (Quite slow duh)
-            const existingData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        
-            // Merge existing data with new data (Honestly underrated feature 8/10)
-            const mergedData = { ...existingData, ...newData };
-        
-            // write the useless interaction log data that i just have cause some guy called "II1QL" told me to add...
-            fs.writeFileSync(filePath, JSON.stringify(mergedData, null, 2), 'utf8');
-        } else {
-            // creating the file if it ain't there bruh ._.
-            fs.writeFileSync(filePath, JSON.stringify(newData, null, 2), 'utf8');
-        }
 
-        logChannel.send({ embeds: [embed], content: `ID: ${updated_latest}` });
+    firebase.database().ref(`Interactions/Logs/${Interaction_ID}`).set(newData)
+    .then(() => {
+        console.log('Data set successfully.');
+    })
+    .catch((error) => {
+        console.error('Error setting data:', error);
+    });
+    firebase.database().ref(`Interactions/`).update({ "latest": updated_latest }); 
+
+    logChannel.send({ embeds: [embed], content: `ID: ${updated_latest}` });
 
 });
 
@@ -354,5 +349,5 @@ server.listen(3000, () => { });
 
 
 // Final Login lol
-client.login(config.botToken);
+client.login(config.testbotToken);
 
