@@ -10,7 +10,6 @@ module.exports = {
     async execute(interaction) {
         const { options, member, guild } = interaction;
         const userid = member.id;
-        const config = require(path.resolve(__dirname, '..', 'config.json'));
 
         try {
             // Creating the initial embed message
@@ -78,7 +77,7 @@ module.exports = {
             
                     let moduleEmbed;
                     let buttons = null;
-                    const body = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    const body = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     switch (selectedModule) {
                         case 'verification':
                             moduleEmbed = new MessageEmbed()
@@ -277,12 +276,12 @@ module.exports = {
             });
 
             const collector2 = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
-            var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+            var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
             collector2.on('collect', async i => {
                 i.deferUpdate();
                 //Verification System Functions
                 if (i.customId === 'module_disable_verification') {
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     
                     if (body && body.hasOwnProperty("verification")) { 
                         firebase.database().ref(`guilds/${guild.id}/modules`).update({"verification": false}), (error) => {
@@ -313,7 +312,7 @@ module.exports = {
                     }
                 } else if (i.customId === 'module_enable_verification') {
                     
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     
                     if (body && body.hasOwnProperty("verification")) {
                         firebase.database().ref(`guilds/${guild.id}/modules`).update({"verification": true}), (error) => {
@@ -345,7 +344,7 @@ module.exports = {
                 //XP System Functions
                 else if (i.customId === 'module_enable_xp') {
                     
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     
                     if (body && body.hasOwnProperty("xp")) {
                         firebase.database().ref(`guilds/${guild.id}/modules`).update({"xp": true}), (error) => {
@@ -375,7 +374,7 @@ module.exports = {
                     }
                 }   else if (i.customId === 'module_disable_xp') {
                     
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     
                     if (body && body.hasOwnProperty("xp")) {
                         firebase.database().ref(`guilds/${guild.id}/modules`).update({"xp": false}), (error) => {
@@ -407,7 +406,7 @@ module.exports = {
                 //Asset System Functions
                 else if (i.customId === 'module_enable_asset') {
                     
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     
                     if (body && body.hasOwnProperty("asset")) {
                         firebase.database().ref(`guilds/${guild.id}/modules`).update({"asset": true}), (error) => {
@@ -437,7 +436,7 @@ module.exports = {
                     }
                 }   else if (i.customId === 'module_disable_asset') {
                     
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     
                     if (body && body.hasOwnProperty("asset")) {
                         firebase.database().ref(`guilds/${guild.id}/modules`).update({"asset": false}), (error) => {
@@ -469,7 +468,7 @@ module.exports = {
                 //Rank System Functions
                 else if (i.customId === 'module_enable_rank') {
                     
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     
                     if (body && body.hasOwnProperty("rank")) {
                         firebase.database().ref(`guilds/${guild.id}/modules`).update({"rank": true}), (error) => {
@@ -499,7 +498,7 @@ module.exports = {
                     }
                 }   else if (i.customId === 'module_disable_rank') {
                     
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/modules.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/modules.json`);
                     
                     if (body && body.hasOwnProperty("asset")) {
                         firebase.database().ref(`guilds/${guild.id}/modules`).update({"asset": false}), (error) => {

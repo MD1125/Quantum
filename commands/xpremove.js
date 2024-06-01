@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const snekfetch = require('snekfetch');
 const firebase = require('firebase');
-const config = require('../config.json');
+
 
 module.exports = {
     name: 'xpremove',
@@ -27,7 +27,7 @@ module.exports = {
             const embedFields = [];
 
             for (const user of mentionedUsers) {
-                const { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/XP_MODULE/USER_DATA/${user.id}.json`);
+                const { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/XP_MODULE/USER_DATA/${user.id}.json`);
 
                 if (body) {
                     const currentXP = body.XP || 0;
@@ -65,7 +65,7 @@ module.exports = {
 
 
             // Send the success embed to the log channel
-            const log = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}/LOG_CHANNEL.json`);
+            const log = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}/LOG_CHANNEL.json`);
             const logChannelId = log.body.CHANNEL_ID;
             const logChannel = guild.channels.cache.get(logChannelId);
             if (logChannel && logChannel.isText()) {

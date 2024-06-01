@@ -1,4 +1,3 @@
-const config = require('./config.json');
 const Discord = require('discord.js');
 var os = require('os-utils');
 var osu = require('node-os-utils')
@@ -32,7 +31,7 @@ const client = new Client({
 
 const firebase = require('firebase');
 const firebaseConfig = {
-    databaseURL: `${config.firebaseURL}`,
+    databaseURL: `${process.env.firebaseURL}`,
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -87,6 +86,40 @@ client.once('ready', () => {
     slashCommands?.create({
         name: 'quota',
         description: 'View your Quota Completion.',
+        options: [
+            {
+                name: 'action',
+                type: 'STRING',
+                description: 'Select an action',
+                required: false,
+                choices: [
+                    {
+                        name: 'add',
+                        value: 'add',
+                    },
+                    {
+                        name: 'remove',
+                        value: 'remove',
+                    },
+                    {
+                        name: 'set',
+                        value: 'set',
+                    },
+                ],
+            },
+            {
+                name: 'username',
+                description: 'The User to add, remove or set Quota Points.',
+                required: false,
+                type: 'USER'
+            },
+            {
+                name: 'value',
+                description: 'Amount',
+                required: false,
+                type: 'USER'
+            }
+        ],
     });
 
     slashCommands?.create({
@@ -194,30 +227,19 @@ client.on('interactionCreate', async (interaction) => {
                 .setDescription(`**Command:** ${commandName}\n**Error:** ${error}`)
                 .setColor('#ff0000')
                 .setTimestamp();
-            
-            const { WebhookClient } = require('discord.js');
-            const { errorwebhookid, errorwebhooktoken } = require('./config.json');
-
-            const webhookClient = new WebhookClient({ id: errorwebhookid, token: errorwebhooktoken });
-            webhookClient.send({
-                content: 'Error',
-                username: 'Error Log',
-                avatarURL: 'https://media.discordapp.net/attachments/1236040861922623589/1236041242023039076/Untitled507_20230916101939.png?ex=663f225c&is=663dd0dc&hm=24e39c6f8999f83c022d58ef4d1171444040e8a446813b1b2f88e2ec1580fd5f&=&format=webp&quality=lossless&width=372&height=350',
-                embeds: [embed],
-            });
 
             await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
         }
     }
 
-    const logChannelId = config.InteractionLogChannelid;
+    const logChannelId = process.env.InteractionLogChannelid;
     const logChannel = client.channels.cache.get(logChannelId);
     if (!logChannel) {
         console.error(`Could not find channel with ID ${logChannelId}`);
         return;
     }
 
-    const { body } = await snekfetch.get(`${config.firebaseURL}Interactions.json`);
+    const { body } = await snekfetch.get(`${process.env.firebaseURL}Interactions.json`);
     const latest_acknowledged = body.latest || 0; 
     const updated_latest = latest_acknowledged + 1; 
     
@@ -244,7 +266,7 @@ const newData = {
         "guildID": interaction.guild.id, 
         "userid": interaction.user.id,
         "username": interaction.user.tag,
-        "Version": "v2",
+        "Version": process.env.Version,
         //"options": interaction // Include only the options the user used in the command
 };
         
@@ -308,7 +330,7 @@ function getTotalMemory() {
 }
 
 client.on('ready', () => {
-    const StatusChannelId = config.StatusChannelId;
+    const StatusChannelId = process.env.StatusChannelId;
     const StatusChannel = client.channels.cache.get(StatusChannelId);
     console.log(`${client.user.tag} Booted`);
 
@@ -349,5 +371,5 @@ server.listen(3000, () => { });
 
 
 // Final Login lol
-client.login(config.token);
+client.login(process.env.botToken);
 

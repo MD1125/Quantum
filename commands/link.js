@@ -8,8 +8,7 @@ module.exports = {
     name: 'link',
     async execute(interaction) {
         const { options, member, guild } = interaction;
-        const config = require(path.resolve(__dirname, '..', 'config.json'));
-        const verifiedRoleName = config.verifiedRole;
+        const verifiedRoleName = process.env.verifiedRole;
         const verifiedRole = interaction.member.guild.roles.cache.find(role => role.name === verifiedRoleName);
         function generateRandomCode() {
             const length = 4;
@@ -24,12 +23,12 @@ module.exports = {
             return code;
         }
           
-        // Generate random code
+        // Generate random code.
         const verifycode = generateRandomCode();
 
 
-        var { body } = await snekfetch.get(`${config.firebaseURL}verified/${member.id}.json`);
-        var { body1 } = await snekfetch.get(`${config.firebaseURL}pending/${member.id}.json`);
+        var { body } = await snekfetch.get(`${process.env.firebaseURL}verified/${member.id}.json`);
+        var { body1 } = await snekfetch.get(`${process.env.firebaseURL}pending/${member.id}.json`);
 
         if (body) {
             try {
@@ -99,7 +98,7 @@ module.exports = {
                 
                         if (i.customId === 'verification_cancel2') {
                             console.log('canceled prompt');
-                            const response = await snekfetch.get(`${config.firebaseURL}pending/${member.id}.json`);
+                            const response = await snekfetch.get(`${process.env.firebaseURL}pending/${member.id}.json`);
                             console.log(`${response}`)
 
                             if (response.body.hasOwnProperty("code")) {
@@ -123,7 +122,7 @@ module.exports = {
 
 
 
-            const body2 = await snekfetch.get(`${config.firebaseURL}pending/${member.id}.json`);
+            const body2 = await snekfetch.get(`${process.env.firebaseURL}pending/${member.id}.json`);
             
 
             let code;
@@ -161,7 +160,7 @@ module.exports = {
 
             const page2 = new MessageEmbed()
                 .setTitle('Verification')
-                .setDescription(`Sorry, but it looks like you haven't completed the steps in the [verification game](${config.verificationLink}). Please complete the steps then click next.`)
+                .setDescription(`Sorry, but it looks like you haven't completed the steps in the [verification game](${process.env.verificationLink}). Please complete the steps then click next.`)
                 .setColor('0x5d65f3');
             const page3 = new MessageEmbed()
                 .setTitle('Verification')
@@ -195,7 +194,7 @@ module.exports = {
             );
 
 
-            const response = await snekfetch.get(`${config.firebaseURL}pending/${member.id}.json`);
+            const response = await snekfetch.get(`${process.env.firebaseURL}pending/${member.id}.json`);
 
             if (response.body !== null && response.body.hasOwnProperty("code")) {
                 const code = response.body["code"];
@@ -217,7 +216,7 @@ module.exports = {
                     i.deferUpdate();
             
                     if (i.customId === 'verification_code_next') {
-                        var { body3 } = await snekfetch.get(`${config.firebaseURL}verified/${member.id}.json`);
+                        var { body3 } = await snekfetch.get(`${process.env.firebaseURL}verified/${member.id}.json`);
             
                         if (body3) {
                             if (verifiedRole) {
@@ -232,7 +231,7 @@ module.exports = {
                         }
                     } else if (i.customId === 'verification_cancel') {
                         console.log('canceled');
-                        const body4 = await snekfetch.get(`${config.firebaseURL}pending/${member.id}.json`);
+                        const body4 = await snekfetch.get(`${process.env.firebaseURL}pending/${member.id}.json`);
                         var { body5 } = body4
                         
                         if (body5) {
@@ -245,7 +244,7 @@ module.exports = {
                 });
 
                 collector.on('end', async i => {
-                    var { body6 } = await snekfetch.get(`${config.firebaseURL}pending/${verifycode}.json`);
+                    var { body6 } = await snekfetch.get(`${process.env.firebaseURL}pending/${verifycode}.json`);
             
                     if (body6) {
                         firebase.database().ref(`pending/${verifycode}`).set({});

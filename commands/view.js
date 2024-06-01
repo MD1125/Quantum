@@ -1,11 +1,11 @@
-const config = require('../config.json');
+
 const { MessageEmbed} = require("discord.js");
 const snekfetch = require('snekfetch');
 const moment = require('moment');
 async function view(interaction, user) {
 
 
-    var { body } = await snekfetch.get(`${config.firebaseURL}/verified/${user.id}.json`)
+    var { body } = await snekfetch.get(`${process.env.firebaseURL}/verified/${user.id}.json`)
     var isVerified = false
     if (body) {
         isVerified = true

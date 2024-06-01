@@ -1,5 +1,5 @@
 **QUANTUM OS**                                                      
-Last Update 8/5/2024
+Last Update 1.June.2024
 
 Commands:
 -bind

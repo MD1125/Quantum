@@ -4,7 +4,7 @@ const { options } = require('node-os-utils');
 const snekfetch = require('snekfetch');
 
 async function update(interaction, user, guild, members, memberPermissions) {
-    var { body } = await snekfetch.get(`${config.firebaseURL}/verified/${user.id}.json`)
+    var { body } = await snekfetch.get(`${process.env.firebaseURL}/verified/${user.id}.json`)
 
     if (!body) {
         return interaction.reply({ content: 'User is not Verified, run /link to verify!', ephemeral: false });

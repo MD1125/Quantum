@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const snekfetch = require('snekfetch');
 const firebase = require('firebase');
-const config = require('../config.json');
+
 
 async function view(interaction, user, guildID) {
     interaction.deferReply();
@@ -10,10 +10,10 @@ async function view(interaction, user, guildID) {
         while (true) {
             let currentXP = "";
             let currentRankName = "";
-            var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/XP_MODULE/USER_DATA/${user.id}.json`);
+            var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/XP_MODULE/USER_DATA/${user.id}.json`);
             currentXP = body.XP || 0;
             
-            var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}.json`);
+            var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}.json`);
             let currentRank;
             if (currentRank < 1) {
                 currentRank = 1;
@@ -21,14 +21,14 @@ async function view(interaction, user, guildID) {
             } else {
                 currentRank = body.RANK;
             }
-            var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guildID}/RANK_MODULE/RANKS/${currentRank}.json`);
+            var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guildID}/RANK_MODULE/RANKS/${currentRank}.json`);
             let currentRankXP = body.REQUIRED
             currentRankName = body.RANK_NAME;
             let nextRank = "";
             nextRank = currentRank + 1; // Increment currentRank by 1 to get the next rank
             
 
-            var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/RANK_MODULE/RANKS/${nextRank}.json`);
+            var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/RANK_MODULE/RANKS/${nextRank}.json`);
             let nextRankXP, nextRankName;
             if (body === null) {
                 nextRankXP = "Max rank reached";
@@ -40,7 +40,7 @@ async function view(interaction, user, guildID) {
 
             if (currentXP < currentRankXP) {
                 while (true) {
-                    var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}.json`);
+                    var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}.json`);
                     const currentRank2 = body.RANK;
                     await firebase.database().ref(`guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}`).update({ RANK: currentRank2 - 1 });
                     const nextRank2 = currentRank2 - 1;
@@ -49,18 +49,18 @@ async function view(interaction, user, guildID) {
 
 
                     if (currentXP >= nextRankXP2) {
-                        var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/XP_MODULE/USER_DATA/${user.id}.json`);
+                        var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/XP_MODULE/USER_DATA/${user.id}.json`);
                         currentXP = body.XP
                         
-                        var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}.json`);
+                        var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}.json`);
                         currentRank = body.RANK
-                        var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guildID}/RANK_MODULE/RANKS/${currentRank}.json`);
+                        var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guildID}/RANK_MODULE/RANKS/${currentRank}.json`);
                         const currentRankName = body.RANK_NAME;
                         nextRank = "";
                         nextRank = currentRank + 1; // Increment currentRank by 1 to get the next rank
                         
             
-                        var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/RANK_MODULE/RANKS/${nextRank}.json`);
+                        var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/RANK_MODULE/RANKS/${nextRank}.json`);
                         nextRankXP, nextRankName;
                         if (body === null) {
                             nextRankXP = "Max rank reached";
@@ -73,18 +73,18 @@ async function view(interaction, user, guildID) {
                     }
                 }
             }
-            var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/XP_MODULE/USER_DATA/${user.id}.json`);
+            var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/XP_MODULE/USER_DATA/${user.id}.json`);
                         currentXP = body.XP
                         
-                        var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}.json`);
+                        var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/RANK_MODULE/USER_DATA/${user.id}.json`);
                         currentRank = body.RANK
-                        var { body } = await snekfetch.get(`${config.firebaseURL}guilds/${guildID}/RANK_MODULE/RANKS/${currentRank}.json`);
+                        var { body } = await snekfetch.get(`${process.env.firebaseURL}guilds/${guildID}/RANK_MODULE/RANKS/${currentRank}.json`);
                         currentRankName = body.RANK_NAME;
                         nextRank = "";
                         nextRank = currentRank + 1; // Increment currentRank by 1 to get the next rank
                         
             
-                        var { body } = await snekfetch.get(`${config.firebaseURL}/guilds/${guildID}/RANK_MODULE/RANKS/${nextRank}.json`);
+                        var { body } = await snekfetch.get(`${process.env.firebaseURL}/guilds/${guildID}/RANK_MODULE/RANKS/${nextRank}.json`);
                         nextRankXP, nextRankName;
                         if (body === null) {
                             nextRankXP = "Max rank reached";

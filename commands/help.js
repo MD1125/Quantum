@@ -1,4 +1,4 @@
-const config = require('../config.json');
+
 const snekfetch = require('snekfetch');
 const firebase = require('firebase');
 

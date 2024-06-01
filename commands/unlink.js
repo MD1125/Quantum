@@ -1,7 +1,7 @@
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const snekfetch = require('snekfetch');
 const firebase = require('firebase');
-const config = require('../config.json');
+
 
 module.exports = {
     name: 'unlink',
@@ -13,7 +13,7 @@ module.exports = {
         const verifiedRole = guild.roles.cache.find(role => role.name === config.verifiedRole);
 
         if (member.roles.cache.some(role => role.name === config.verifiedRole)) {
-            var { body } = await snekfetch.get(`${config.firebaseURL}verified/${userid}.json`);
+            var { body } = await snekfetch.get(`${process.env.firebaseURL}verified/${userid}.json`);
 
 
             if (body) {

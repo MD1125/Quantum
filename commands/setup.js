@@ -1,7 +1,6 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu, ModalBuilder, Events, MessageEmbed } = require('discord.js');
 const snekfetch = require('snekfetch');
 const firebase = require('firebase');
-const config = require('../config.json');
 const noblox = require('noblox.js');
 
 module.exports = {
@@ -158,7 +157,7 @@ module.exports = {
         );
 
 
-        const response = await snekfetch.get(`${config.firebaseURL}guilds/${guild.id}.json`);
+        const response = await snekfetch.get(`${process.env.firebaseURL}guilds/${guild.id}.json`);
 
 
         interaction.reply({ embeds: [page1], components: [page2row], ephemeral: false }).then(message => {
