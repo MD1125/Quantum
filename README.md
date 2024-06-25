@@ -21,4 +21,4 @@ This Bot makes use of the Following Services:
 - Roblox / https://www.roblox.com
 
 Current System Version:
--2- (.3)
+-2- (.4)
