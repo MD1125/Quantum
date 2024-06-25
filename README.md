@@ -1,5 +1,5 @@
 **QUANTUM OS**                                                      
-Last Update 1.June.2024
+Last Update 20. June.2024
 
 Commands:
 -bind
@@ -21,4 +21,4 @@ This Bot makes use of the Following Services:
 - Roblox / https://www.roblox.com
 
 Current System Version:
--2-
+-2- (.3)
